@@ -67,8 +67,6 @@ namespace WebApp_OpenIDConnect_DotNet.Controllers
 
             return View();
         }
-
-
 		
 		[AuthorizeForScopes(Scopes = new[] { "https://storage.azure.com/user_impersonation" })]
 
@@ -92,8 +90,16 @@ namespace WebApp_OpenIDConnect_DotNet.Controllers
                 {
                     throw ex;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    try
+                    {
+                        message += $". Reason - {((Azure.RequestFailedException)ex).ErrorCode}";
+                    }
+                    catch (Exception)
+                    {
+                        message += $". Reason - {ex.Message}";
+                    }
                 }
             }
 
